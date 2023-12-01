@@ -1,28 +1,41 @@
-import React,{ useState } from "react";
+import React, { useState } from "react";
 import "./App.css";
-import Home from './pages/Home/home';
+import Home from "./pages/Home/home";
 import DetailProduct from "./Components/DetailProduct";
-import {createBrowserRouter,RouterProvider} from "react-router-dom"
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Login from "./pages/Login/login";
+import ProtectedRoute from "./helpers/ProtectedRoute";
+import { AuthProvider } from "./context/userContext";
 
-const router=createBrowserRouter([
+const router = createBrowserRouter([
   {
-    path:"/",
-    children:[
+    path: "/",
+    children: [
       {
-        path:"/",
-        element:<Home/>
+        path: "/",
+        element: <Home />,
       },
       {
-        path:"/product/:id",
-        element:<DetailProduct/>
-      }
-    ]
-  }
+        path: "/product/:id",
+        element: (
+          <ProtectedRoute>
+            <DetailProduct />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+    ],
+  },
 ]);
 
 function App() {
   return (
-   <RouterProvider router={router}/>
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   );
 }
 
